@@ -11,3 +11,11 @@ services:
         volumes:
             - /home/user/docker/onedrive:/onedrive/conf/
             - /mnt/media/onedrive:/onedrive/data
+        networks:
+            proxy:
+        security_opt:
+            - no-new-privileges:true
+
+networks:
+  proxy:
+    external: true
