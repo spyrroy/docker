@@ -1,0 +1,13 @@
+services:
+    onedrive:
+        image: driveone/onedrive:latest
+        container_name: onedrive
+        stdin_open: true # docker run -i
+        tty: true        # docker run -t
+        restart: unless-stopped
+        environment:
+            - ONEDRIVE_UID=1000
+            - ONEDRIVE_GID=1000
+        volumes:
+            - /home/user/docker/onedrive:/onedrive/conf/
+            - /mnt/media/onedrive:/onedrive/data
