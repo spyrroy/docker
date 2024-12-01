@@ -1,0 +1,167 @@
+
+services:
+  radarr:
+    container_name: radarr
+    image: ghcr.io/hotio/radarr:latest
+    restart: unless-stopped
+    logging:
+      driver: json-file
+    ports:  #uncomment if not using reverse proxy
+      - 7878:7878
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UNMASK=002
+      - TZ=Europe/Kyiv
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /home/user/docker/torrents/radarr:/config
+      - /mnt/media/data:/data
+    networks:
+      - proxy
+    security_opt:
+      - no-new-privileges:true
+
+  sonarr:
+    container_name: sonarr
+    image: ghcr.io/hotio/sonarr:latest
+    restart: unless-stopped
+    logging:
+      driver: json-file
+    ports: #uncomment if not using reverse proxy
+     - 8989:8989
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UNMASK=002
+      - TZ=Europe/Kyiv
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /home/user/docker/torrents/sonarr:/config
+      - /mnt/media/data:/data
+    networks:
+      - proxy
+    security_opt:
+      - no-new-privileges:true
+
+  prowlarr:
+    container_name: prowlarr
+    image: ghcr.io/hotio/prowlarr:latest
+    restart: unless-stopped
+    ports: #uncomment if not using reverse proxy
+      - 9696:9696
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Europe/Kyiv
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /home/user/docker/torrents/prowlarr:/config
+    networks:
+      - proxy
+    security_opt:
+      - no-new-privileges:true
+
+  bazarr:
+    container_name: bazarr
+    image: ghcr.io/hotio/bazarr:latest
+    restart: unless-stopped
+    logging:
+      driver: json-file
+    ports: # uncomment if not using reverse proxy
+      - 6767:6767
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UNMASK=002
+      - TZ=Europe/Kyiv
+      - WEBUI_PORTS=6767/tcp,6767/udp
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /home/user/docker/torrents/bazarr:/config
+      - /mnt/media/data:/data/media
+    networks:
+      - proxy
+    security_opt:
+      - no-new-privileges:true
+
+  qbittorrent:
+    container_name: qbittorrent
+    image: ghcr.io/hotio/qbittorrent:latest
+    ports:
+      - 10095:8080
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Europe/Kyiv
+      - WEBUI_PORTS=8080/tcp,8080/udp
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /home/user/docker/torrents/qbittorrent:/config
+      - /mnt/media/data:/data
+      - /mnt/media/onedrive:/onedrive
+    restart: unless-stopped
+    networks:
+      - proxy
+    security_opt:
+      - no-new-privileges:true
+
+  lidarr:
+    container_name: lidarr
+    image: ghcr.io/hotio/lidarr:latest
+    ports: # uncomment if not using reverse proxy
+       - 8686:8686
+    environment:
+        - PUID=1000
+        - PGID=1000
+        - UNMASK=002
+        - TZ=Europe/Kyiv
+    volumes:
+        - /etc/localtime:/etc/localtime:ro
+        - /home/user/docker/torrents/lidarr:/config
+        - /mnt/media/data:/data
+    restart: unless-stopped
+    networks:
+        - proxy
+    security_opt:
+      - no-new-privileges:true
+
+  overseerr:
+    container_name: overseerr
+    image: ghcr.io/hotio/overseerr:latest
+    ports: # uncomment if not using reverse proxy
+      - 5055:5055
+    environment:
+      - LOG_LEVEL=info
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Europe/Kyiv
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /home/user/docker/torrents/overseerr:/config
+    restart: unless-stopped
+    networks:
+        - proxy
+    security_opt:
+      - no-new-privileges:true
+
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    container_name: flaresolverr
+    environment:
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+      - LOG_HTML=${LOG_HTML:-false}
+      - CAPTCHA_SOLVER=${CAPTCHA_SOLVER:-none}
+      - TZ=Europe/Kyiv
+    ports:
+      - ${PORT:-8191}:8191
+    restart: unless-stopped
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true
