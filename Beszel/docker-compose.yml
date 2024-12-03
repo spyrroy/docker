@@ -1,0 +1,16 @@
+services:
+  beszel:
+    image: 'henrygd/beszel'
+    container_name: 'beszel'
+    restart: unless-stopped
+    ports:
+      - '8090:8090'
+    volumes:
+      - /home/user/docker/beszel/data:/beszel_data
+    networks:
+      proxy:
+
+
+networks:
+  proxy:
+    external: true
