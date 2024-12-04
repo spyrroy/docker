@@ -1,0 +1,24 @@
+
+services:
+  apprise-api:
+    image: caronc/apprise:latest
+    container_name: apprise
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Kyiv
+#      - APPRISE_ATTACH_SIZE=0 #optional
+    volumes:
+      - /home/user/docker/apprise/config:/config
+#      - /path/to/apprise-api/attachments:/attachments #optional
+    ports:
+      - 8008:8000
+    restart: unless-stopped
+    networks:
+      - proxy
+    security_opt:
+      - no-new-privileges:true
+
+networks:
+  proxy:
+    external: true

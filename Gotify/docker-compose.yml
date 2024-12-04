@@ -1,0 +1,20 @@
+
+services:
+  gotify:
+    image: gotify/server
+    container_name: gotify
+    ports:
+      - 8070:80
+    volumes:
+      - /home/user/docker/gotify:/app/data
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      proxy:
+    environment:
+      - TZ=Europe/Kyiv
+
+networks:
+  proxy:
+    external: true
