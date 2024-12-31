@@ -1,0 +1,15 @@
+services:
+  netalertx:
+    container_name: NetAlertX
+    hostname: NetAlertX
+    # use the below line if you want to test the latest dev image
+    # image: "jokobsk/netalertx-dev:latest"
+    image: jokobsk/netalertx:latest
+    environment:
+      - TZ=Europe/Kyiv
+      - PORT=20211
+    restart: always
+    volumes:
+      - ./db:/app/db
+      - ./config:/app/config
+    network_mode: host
